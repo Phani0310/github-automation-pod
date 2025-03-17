@@ -38,5 +38,5 @@ func main() {
 		log.Fatalf("Error pushing to repository: %v", err)
 	}
 
-	fmt.Println("✅ File generated and pushed successfully.")
+	fmt.Println("File generated and pushed successfully.")
 }
