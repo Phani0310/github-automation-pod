@@ -2,41 +2,41 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
+	"log"     // for logging errors and messages
+	"os"      // for accessing system level operations
+	"os/exec" // for executing shell commands
 
-	"github.com/Phani0310/github-automation-pod/generator"
+	"github.com/Phani0310/github-automation-pod/generator" // importing genrator package
 )
 
 // runCommand runs shell commands like git add, commit, and push
 func runCommand(command string, args ...string) error {
-	cmd := exec.Command(command, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd := exec.Command(command, args...) // command -> shell command to run (git) and args -> arguments to pass to the command (add)
+	cmd.Stdout = os.Stdout                // direct the commands output to the terminal (for debugging)
+	cmd.Stderr = os.Stderr                // direct commands error output to the terminal (for debugging)
 	return cmd.Run()
 }
 
 func main() {
-	// Step 1: Generate a file using the generator package
+	// generate a file using the generator package (create a file with a unique timestamp based name and content)
 	if err := generator.GenerateDynamicFile(); err != nil {
-		log.Fatalf("Error generating file: %v", err)
+		log.Fatalf("Error generating file: %v", err) // if file genration fails, log the error and exit
 	}
 
-	// Step 2: Stage the changes
+	// stage the changes using git add . stages all modified files for commit
 	if err := runCommand("git", "add", "."); err != nil {
 		log.Fatalf("Error adding files: %v", err)
 	}
 
-	// Step 3: Commit the changes
+	// commit the changes with custom message and || operator will prevent errors if no changes are made
 	if err := runCommand("git", "commit", "-m", "Automated file generation"); err != nil {
 		log.Fatalf("Error committing changes: %v", err)
 	}
 
-	// Step 4: Push changes to the remote repository
+	// push changes to the remote repository and pushes to main "branch of origin" repository
 	if err := runCommand("git", "push", "origin", "main"); err != nil {
 		log.Fatalf("Error pushing to repository: %v", err)
 	}
 
-	fmt.Println("File generated and pushed successfully.")
+	fmt.Println("File generated and pushed successfully.") // if everything successful, prints given message
 }

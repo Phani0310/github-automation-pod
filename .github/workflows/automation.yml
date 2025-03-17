@@ -1,31 +1,33 @@
-name: GitHub Automation
+name: GitHub Automation # name of github action workflow
 
+# triggering the workflow on every push to main branch or when manually triggered
 on:
   push:
     branches:
-      - main
-  workflow_dispatch: # Allows manual trigger
+      - main # triggered when code is pushed to main branch
+  workflow_dispatch: # allows manual trigger
 
+  # defining jobs to be executed
 jobs:
   generate-and-commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # runs this job on latest ubuntu virtual machine
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Checkout Code # checkout repository to runners file system
+        uses: actions/checkout@v4 # this action checks out repository so that runnerr can access the code
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - name: Setup Go # setup go environment
+        uses: actions/setup-go@v4 # action installs and setsup go
         with:
-          go-version: '1.18'
+          go-version: '1.18' # go version to install
 
-      - name: Run Generator
+      - name: Run Generator # run file genration script
         run: go run main.go
 
-      - name: Commit and Push Changes
+      - name: Commit and Push Changes # configure git (set username and email)
         run: |
-          git config --global user.email "automation-bot@example.com"
-          git config --global user.name "Automation Bot"
-          git add .
+          git config --global user.email "phanideepkunisetty@gmail.com" 
+          git config --global user.name "Phani0310"
+          git add . 
           git commit -m "Automated file generation" || echo "No changes to commit"
           git push origin main
