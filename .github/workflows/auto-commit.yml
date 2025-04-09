@@ -1,5 +1,7 @@
+# Name of the workflow that appears in the GitHub Actions tab
 name: Auto Generate and Commit
 
+# Trigger the workflow when a push is made to the 'main' branch
 on:
   push:
     branches:
@@ -7,25 +9,38 @@ on:
 
 jobs:
   run-generator:
+    # This job runs on the latest version of Ubuntu provided by GitHub
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code from the repository so it can be accessed in the job
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Step 2: Set up the Go environment using version 1.21
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: '1.21' # specifies the Go version
 
+      # Step 3: Run the Go automation program (main.go) to generate a file
       - name: Run Go Automation Pod
         run: |
-          go run main.go
+          go run main.go # this executes your automation logic from main.go
 
+      # Step 4: Commit and push any new generated files to the repo
       - name: Push Changes
         run: |
+          # Configure Git user details for the commit
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Stage all the changes
           git add .
+
+          # Commit the changes with a message; skip if no changes to commit
           git commit -m "Auto: generated file via GitHub Action" || echo "No changes to commit"
+
+          # Push the committed changes back to the main branch on GitHub
           git push origin main
+
