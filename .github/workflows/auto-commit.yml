@@ -1,0 +1,31 @@
+name: Auto Generate and Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-generator:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Run Go Automation Pod
+        run: |
+          go run main.go
+
+      - name: Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto: generated file via GitHub Action" || echo "No changes to commit"
+          git push origin main
