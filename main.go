@@ -57,5 +57,5 @@ func main() {
 		log.Fatalf("git operation failed: %v", err)
 	}
 
-	fmt.Println("✅ File generated and pushed successfully.")
+	fmt.Println("File generated and pushed successfully.")
 }
