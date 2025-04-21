@@ -36,7 +36,7 @@ func main() {
 		}
 
 		if newCommit {
-			fmt.Println("🚨 New commit detected! Generating file...")
+			fmt.Println("New commit detected! Generating file...")
 
 			gen := generator.New()
 			if _, err := gen.Generate(); err != nil {
